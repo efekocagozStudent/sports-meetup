@@ -1,0 +1,22 @@
+# Dependency directories
+vendor/
+
+# Docker volumes / DB data
+mysql_data/
+mysqldata/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log

@@ -31,7 +31,11 @@ phpMyAdmin: `http://localhost:8081` — username `root`, password `secret123`
 | `riley_runner` | riley@example.com | User (organises running events) |
 | `morgan_net` | morgan@example.com | User (organises volleyball events) |
 
-The `admin` account can access `/admin` — a panel to view all users and all events (including cancelled ones) with the ability to hard-delete either. Regular users cannot access this route; they receive a 403 page.
+The `admin` account can access `/admin` — a panel with full CRUD over users and events:
+- **Users**: edit username, email, and role; delete any non-admin account
+- **Events**: create events, edit all fields (title, sport, date, location, status, etc.), delete any event
+- All events including cancelled ones are visible
+- Regular users cannot access any `/admin` route; they receive a 403 page
 
 ---
 

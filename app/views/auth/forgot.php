@@ -4,8 +4,8 @@
     <div class="col-md-5">
         <div class="card auth-card">
             <div class="card-body p-4">
-                <h1 class="h4 mb-1 fw-bold">Sign In</h1>
-                <p class="text-muted mb-4 small">Welcome back! Enter your credentials.</p>
+                <h1 class="h4 mb-1 fw-bold">Reset Password</h1>
+                <p class="text-muted mb-4 small">Enter your email and we'll generate a reset link.</p>
 
                 <?php if (!empty($errors)): ?>
                 <div class="alert alert-danger">
@@ -17,7 +17,11 @@
                 </div>
                 <?php endif; ?>
 
-                <form method="POST" action="<?= url('/login') ?>" novalidate id="loginForm">
+                <?php if (!empty($success)): ?>
+                <div class="alert alert-success"><?= $success /* intentionally unescaped — contains a safe demo link built with htmlspecialchars */ ?></div>
+                <?php endif; ?>
+
+                <form method="POST" action="<?= url('/forgot-password') ?>" novalidate>
                     <input type="hidden" name="csrf_token" value="<?= e($csrf) ?>">
 
                     <div class="mb-3">
@@ -27,24 +31,14 @@
                                placeholder="you@example.com" required autofocus>
                     </div>
 
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label for="password" class="form-label fw-semibold">Password</label>
-                            <a href="<?= url('/forgot-password') ?>" class="small text-muted">Forgot password?</a>
-                        </div>
-                        <input type="password" class="form-control" id="password" name="password"
-                               placeholder="Your password" required>
-                    </div>
-
                     <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Send Reset Link</button>
                     </div>
                 </form>
 
                 <hr class="my-4">
                 <p class="text-center text-muted small mb-0">
-                    Don't have an account?
-                    <a href="<?= url('/register') ?>" class="fw-semibold">Create one</a>
+                    Remembered it? <a href="<?= url('/login') ?>" class="fw-semibold">Back to sign in</a>
                 </p>
             </div>
         </div>

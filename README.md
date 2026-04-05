@@ -9,6 +9,8 @@ A PHP 8 sports event management application built with a custom MVC framework ru
 ```bash
 docker-compose up --build
 ```
+## GitHub Repo
+https://github.com/efekocagozStudent/sports-meetup.git
 
 Visit `http://localhost:8080`. The database schema is in `sql/schema.sql`.
 

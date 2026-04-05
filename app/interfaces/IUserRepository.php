@@ -11,4 +11,7 @@ interface IUserRepository
     public function allUsers(): array;
     public function deleteById(int $id): void;
     public function updateById(int $id, string $username, string $email, string $role): void;
+    public function createResetToken(string $email, string $token): void;
+    public function findResetToken(string $token): array|false;
+    public function updatePassword(string $email, string $password): void;
 }

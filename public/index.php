@@ -75,11 +75,18 @@ $method = strtoupper($_SERVER['REQUEST_METHOD']);
 $router = new Router();
 
 // Auth
-$router->get('/login',    'AuthController', 'loginForm');
-$router->post('/login',   'AuthController', 'login');
-$router->get('/register', 'AuthController', 'registerForm');
-$router->post('/register','AuthController', 'register');
-$router->get('/logout',   'AuthController', 'logout');
+$router->get('/login',             'AuthController', 'loginForm');
+$router->post('/login',            'AuthController', 'login');
+$router->get('/register',          'AuthController', 'registerForm');
+$router->post('/register',         'AuthController', 'register');
+$router->get('/logout',            'AuthController', 'logout');
+$router->get('/forgot-password',   'AuthController', 'forgotForm');
+$router->post('/forgot-password',  'AuthController', 'forgotSubmit');
+$router->get('/reset-password/{token}',  'AuthController', 'resetForm');
+$router->post('/reset-password/{token}', 'AuthController', 'resetSubmit');
+
+// Static pages
+$router->get('/privacy', 'PageController', 'privacy');
 
 // Events
 $router->get('/',                              'EventController', 'index');

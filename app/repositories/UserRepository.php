@@ -71,4 +71,37 @@ class UserRepository implements IUserRepository
         );
         $stmt->execute([$username, $email, $role, $id]);
     }
+
+    public function createResetToken(string $email, string $token): void
+    {
+        // Delete any existing tokens for this email first
+        $del = $this->db->prepare('DELETE FROM password_resets WHERE email = ?');
+        $del->execute([$email]);
+
+        $stmt = $this->db->prepare(
+            'INSERT INTO password_resets (email, token, expires_at, created_at)
+             VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 1 HOUR), NOW())'
+        );
+        $stmt->execute([$email, $token]);
+    }
+
+    public function findResetToken(string $token): array|false
+    {
+        $stmt = $this->db->prepare(
+            'SELECT * FROM password_resets WHERE token = ? AND expires_at > NOW()'
+        );
+        $stmt->execute([$token]);
+        return $stmt->fetch();
+    }
+
+    public function updatePassword(string $email, string $password): void
+    {
+        $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+        $stmt = $this->db->prepare('UPDATE users SET password_hash = ? WHERE email = ?');
+        $stmt->execute([$hash, $email]);
+
+        // Clean up used tokens
+        $del = $this->db->prepare('DELETE FROM password_resets WHERE email = ?');
+        $del->execute([$email]);
+    }
 }

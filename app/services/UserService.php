@@ -76,4 +76,39 @@ class UserService implements IUserService
     {
         $this->userRepo->updateById($id, $username, $email, $role);
     }
+
+    public function requestPasswordReset(string $email): string|false
+    {
+        if (!$this->userRepo->findByEmail($email)) {
+            return false;
+        }
+        $token = bin2hex(random_bytes(32));
+        $this->userRepo->createResetToken($email, $token);
+        return $token;
+    }
+
+    public function resetPassword(string $token, string $password, string $confirm): array
+    {
+        $errors = [];
+
+        $row = $this->userRepo->findResetToken($token);
+        if (!$row) {
+            $errors[] = 'This reset link is invalid or has expired.';
+            return ['errors' => $errors];
+        }
+
+        if (strlen($password) < 8) {
+            $errors[] = 'Password must be at least 8 characters.';
+        }
+        if ($password !== $confirm) {
+            $errors[] = 'Passwords do not match.';
+        }
+
+        if (!empty($errors)) {
+            return ['errors' => $errors];
+        }
+
+        $this->userRepo->updatePassword($row['email'], $password);
+        return ['success' => true];
+    }
 }

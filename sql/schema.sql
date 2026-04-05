@@ -72,6 +72,17 @@ CREATE TABLE IF NOT EXISTS notifications (
     CONSTRAINT fk_notif_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- ── password_resets ──────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS password_resets (
+    id         INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
+    email      VARCHAR(255)  NOT NULL,
+    token      VARCHAR(64)   NOT NULL UNIQUE,
+    expires_at DATETIME      NOT NULL,
+    created_at DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_pr_email (email),
+    INDEX idx_pr_token (token)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- ── Seed: sport types ─────────────────────────────────────────────────────
 INSERT INTO sport_types (name, min_players, max_players, description, icon) VALUES
     ('Airsoft',    6,  40, 'Tactical shooting sport using replica firearms.',    '🔫'),

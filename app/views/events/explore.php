@@ -89,6 +89,10 @@
       </div>
       <div class="modal-body pt-2" id="detailModalBody"></div>
       <div class="modal-footer border-0">
+        <?php if (!empty($_SESSION['user_id'])): ?>
+        <button id="detailModalJoin" class="btn btn-success" style="display:none;" onclick="apiJoin()">Join Event</button>
+        <button id="detailModalLeave" class="btn btn-warning" style="display:none;" onclick="apiLeave()">Leave Event</button>
+        <?php endif; ?>
         <a id="detailModalLink" href="#" class="btn btn-primary">View full page →</a>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
@@ -279,10 +283,17 @@
   // Shows the modal with a spinner immediately, then calls GET /api/events/{id}
   // to fetch the full event detail and replaces the spinner with the content.
   async function openDetail(id) {
+    _currentDetailId = id;
     const modal = new bootstrap.Modal(document.getElementById('detailModal'));
     const body  = document.getElementById('detailModalBody');
     const title = document.getElementById('detailModalLabel');
     const link  = document.getElementById('detailModalLink');
+    const joinBtn  = document.getElementById('detailModalJoin');
+    const leaveBtn = document.getElementById('detailModalLeave');
+
+    // Reset join/leave buttons
+    if (joinBtn)  { joinBtn.style.display = '';  joinBtn.disabled = false; joinBtn.textContent = 'Join Event'; }
+    if (leaveBtn) { leaveBtn.style.display = 'none'; }
 
     // Show spinner and open modal before the request completes
     body.innerHTML  = '<div class="text-center py-3"><div class="spinner-border text-primary"></div></div>';
@@ -403,4 +414,61 @@
   // Kick off the initial API call as soon as the script runs.
   fetchEvents();
 })();
+
+// ── Join / Leave via API (POST) ───────────────────────────────────────
+// These functions live outside the IIFE so the inline onclick handlers
+// in the modal footer can reach them.
+let _currentDetailId = null;
+
+async function apiJoin() {
+  if (!_currentDetailId) return;
+  const btn = document.getElementById('detailModalJoin');
+  btn.disabled = true;
+  btn.textContent = 'Joining…';
+
+  try {
+    const res  = await fetch('<?= url('/api/events/') ?>' + _currentDetailId + '/join', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+    });
+    const json = await res.json();
+    if (!json.success) throw new Error(json.message ?? 'Could not join.');
+
+    btn.textContent = '✓ Joined!';
+    btn.classList.replace('btn-success', 'btn-outline-success');
+    // Show the leave button
+    const leaveBtn = document.getElementById('detailModalLeave');
+    if (leaveBtn) { leaveBtn.style.display = ''; }
+    btn.style.display = 'none';
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Join Event';
+    alert(err.message);
+  }
+}
+
+async function apiLeave() {
+  if (!_currentDetailId) return;
+  const btn = document.getElementById('detailModalLeave');
+  btn.disabled = true;
+  btn.textContent = 'Leaving…';
+
+  try {
+    const res  = await fetch('<?= url('/api/events/') ?>' + _currentDetailId + '/leave', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+    });
+    const json = await res.json();
+    if (!json.success) throw new Error(json.message ?? 'Could not leave.');
+
+    btn.style.display = 'none';
+    // Show join button again
+    const joinBtn = document.getElementById('detailModalJoin');
+    if (joinBtn) { joinBtn.style.display = ''; joinBtn.disabled = false; joinBtn.textContent = 'Join Event'; joinBtn.classList.replace('btn-outline-success','btn-success'); }
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Leave Event';
+    alert(err.message);
+  }
+}
 </script>

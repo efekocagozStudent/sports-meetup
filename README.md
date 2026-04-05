@@ -46,7 +46,7 @@ The app runs locally on Docker. To share it with a public URL without deploying:
 > ```
 
 ---
-
+ first public url: https://holli-proscholastic-businesslike.ngrok-free.dev/
 ## Test accounts
 
 Run `sql/seed.sql` after `sql/schema.sql` to populate the database with the accounts below.

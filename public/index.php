@@ -125,8 +125,10 @@ $router->post('/notifications/clear',   'NotificationController', 'clear');
 $router->get('/explore', 'EventController', 'explore');
 
 // JSON API
-$router->get('/api/events',      'ApiController', 'events');
-$router->get('/api/events/{id}', 'ApiController', 'event');
-$router->get('/api/sports',      'ApiController', 'sports');
+$router->get('/api/events',             'ApiController', 'events');
+$router->get('/api/events/{id}',        'ApiController', 'event');
+$router->post('/api/events/{id}/join',  'ApiController', 'joinEvent');
+$router->post('/api/events/{id}/leave', 'ApiController', 'leaveEvent');
+$router->get('/api/sports',             'ApiController', 'sports');
 
 $router->dispatch($method, $uri);

@@ -86,4 +86,48 @@ class ApiController extends Controller
             'data'    => $types,
         ]);
     }
+
+    /**
+     * POST /api/events/{id}/join — join an event via the JSON API.
+     */
+    public function joinEvent(string $id): void
+    {
+        if (empty($_SESSION['user_id'])) {
+            $this->json(['success' => false, 'message' => 'Authentication required.'], 401);
+        }
+        if (!ctype_digit($id)) {
+            $this->json(['success' => false, 'message' => 'Invalid event ID.'], 400);
+        }
+
+        $eventId = (int) $id;
+        $userId  = (int) $_SESSION['user_id'];
+
+        try {
+            $msg = $this->eventService->joinEvent($eventId, $userId, $_SESSION['username']);
+        } catch (\RuntimeException $e) {
+            $this->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+
+        $this->json(['success' => true, 'message' => $msg]);
+    }
+
+    /**
+     * POST /api/events/{id}/leave — leave an event via the JSON API.
+     */
+    public function leaveEvent(string $id): void
+    {
+        if (empty($_SESSION['user_id'])) {
+            $this->json(['success' => false, 'message' => 'Authentication required.'], 401);
+        }
+        if (!ctype_digit($id)) {
+            $this->json(['success' => false, 'message' => 'Invalid event ID.'], 400);
+        }
+
+        $eventId = (int) $id;
+        $userId  = (int) $_SESSION['user_id'];
+
+        $this->eventService->leaveEvent($eventId, $userId, $_SESSION['username']);
+
+        $this->json(['success' => true, 'message' => 'You have left the event.']);
+    }
 }

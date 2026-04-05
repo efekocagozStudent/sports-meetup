@@ -4,15 +4,46 @@ A PHP 8 sports event management application built with a custom MVC framework ru
 
 ---
 
-## Running the app
+## GitHub Repo
+https://github.com/efekocagozStudent/sports-meetup.git
+
+---
+
+## Running the app locally
 
 ```bash
 docker-compose up --build
 ```
-## GitHub Repo
-https://github.com/efekocagozStudent/sports-meetup.git
 
 Visit `http://localhost:8080`. The database schema is in `sql/schema.sql`.
+
+---
+
+## Exposing the app via a public URL (ngrok)
+
+The app runs locally on Docker. To share it with a public URL without deploying:
+
+1. **Install ngrok** (if not already installed):
+   ```cmd
+   winget install Ngrok.Ngrok
+   ```
+
+2. **Add your authtoken** (one-time, from https://dashboard.ngrok.com/get-started/your-authtoken):
+   ```cmd
+   ngrok config add-authtoken YOUR_TOKEN
+   ```
+
+3. **Make sure Docker is running** (`docker-compose up`), then start the tunnel:
+   ```cmd
+   ngrok http 8080
+   ```
+
+4. ngrok prints a public HTTPS URL (e.g. `https://xxxx.ngrok-free.app`). Anyone on the internet can reach the app via that URL while the tunnel is open.
+
+> **Note:** The free plan URL changes every time you restart ngrok. To get a permanent free static domain, go to https://dashboard.ngrok.com/domains, generate a static domain, and run:
+> ```cmd
+> ngrok http --domain=YOUR-STATIC-DOMAIN.ngrok-free.app 8080
+> ```
 
 ---
 

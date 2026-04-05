@@ -94,3 +94,48 @@ INSERT INTO sport_types (name, min_players, max_players, description, icon) VALU
     ('Badminton',  2,   4, 'Racket sport using a shuttlecock.',                  '🏸'),
     ('Running',    2,  50, 'Group running events, fun-runs and races.',          '🏃')
 ON DUPLICATE KEY UPDATE name = VALUES(name);
+
+-- ── Seed: users ───────────────────────────────────────────────────────────
+-- All passwords are: Password1!
+INSERT INTO users (id, username, email, password_hash, role, created_at) VALUES
+    (1, 'efe',           'kocagozefe@gmail.com',        '$2y$12$dp54x.wZewSgM2ouzL9QeOlWYSHQWqK7RhC1EzRH7ABKOkliAlX6e', 'user',  '2026-04-05 02:24:23'),
+    (2, 'eefe',          'efekocagozphotos@gmail.com',  '$2y$12$dp54x.wZewSgM2ouzL9QeOlWYSHQWqK7RhC1EzRH7ABKOkliAlX6e', 'user',  '2026-04-05 02:27:11'),
+    (3, 'alex_smith',    'alex@example.com',            '$2y$12$dp54x.wZewSgM2ouzL9QeOlWYSHQWqK7RhC1EzRH7ABKOkliAlX6e', 'user',  '2026-03-06 05:29:07'),
+    (4, 'jordan_fc',     'jordan@example.com',          '$2y$12$dp54x.wZewSgM2ouzL9QeOlWYSHQWqK7RhC1EzRH7ABKOkliAlX6e', 'user',  '2026-03-11 05:29:07'),
+    (5, 'sam_hoops',     'sam@example.com',             '$2y$12$dp54x.wZewSgM2ouzL9QeOlWYSHQWqK7RhC1EzRH7ABKOkliAlX6e', 'user',  '2026-03-16 05:29:07'),
+    (6, 'riley_runner',  'riley@example.com',           '$2y$12$dp54x.wZewSgM2ouzL9QeOlWYSHQWqK7RhC1EzRH7ABKOkliAlX6e', 'user',  '2026-03-21 05:29:07'),
+    (7, 'morgan_net',    'morgan@example.com',          '$2y$12$dp54x.wZewSgM2ouzL9QeOlWYSHQWqK7RhC1EzRH7ABKOkliAlX6e', 'user',  '2026-03-26 05:29:07'),
+    (8, 'admin',         'admin@sportsmeet.local',      '$2y$12$dp54x.wZewSgM2ouzL9QeOlWYSHQWqK7RhC1EzRH7ABKOkliAlX6e', 'admin', '2026-04-05 07:05:02')
+ON DUPLICATE KEY UPDATE username = VALUES(username);
+
+-- ── Seed: events ──────────────────────────────────────────────────────────
+INSERT INTO events (id, title, description, sport_type_id, organizer_id, event_date, location, max_participants, requires_approval, skill_level, status, created_at) VALUES
+    (1, 'tennis',                          'tennis at amsterdam',                                                                                                                                                    3, 1, '2026-04-06 04:24:00', 'tennis amsterdam',                     6,  0, 'beginner',     'open', '2026-04-05 02:25:29'),
+    (2, 'Sunday 5-a-side Kickabout',       'Casual Sunday football in the park — all welcome. Bibs provided, just bring boots and water. We usually play two 30-minute halves with a short break.',                   4, 4, '2026-04-10 05:33:51', 'Victoria Park, East London',            10, 0, 'beginner',     'open', '2026-04-02 05:33:51'),
+    (3, 'Competitive Basketball — 3v3',    'Competitive 3-on-3 half-court basketball. Intermediate level and above only. Bring your own water and prepare for a fast-paced game.',                                    5, 5, '2026-04-12 05:33:51', 'Brixton Recreation Centre, London',     6,  0, 'intermediate', 'open', '2026-03-31 05:33:51'),
+    (4, 'Morning Parkrun Group',           'Friendly 5k group run every Saturday morning. We run at the pace of the slowest member — nobody gets left behind.',                                                       8, 6, '2026-04-08 05:33:51', 'Hyde Park, London',                     30, 0, 'beginner',     'open', '2026-04-03 05:33:51'),
+    (5, 'Airsoft Skirmish — Urban Map',    'Full-day airsoft skirmish on an urban close-quarters map. Approval required as minimum kit standards apply. Bring 500+ BBs.',                                             1, 3, '2026-04-17 05:33:51', 'Alpha 55 Airsoft, Birmingham',          20, 1, 'advanced',     'open', '2026-03-29 05:33:51'),
+    (6, 'Tennis Doubles — Mixed',          'Mixed doubles tennis, two-hour session. Three sets, winner stays on. Any level welcome.',                                                                                 3, 7, '2026-04-09 05:33:51', 'Regent\'s Park Tennis Courts, London',  4,  0, 'intermediate', 'open', '2026-04-04 05:33:51'),
+    (7, 'Beach Volleyball Tournament',     'Round-robin beach volleyball — 4 teams of 3. Approved players only as we need even numbers. Food and drinks after.',                                                      6, 7, '2026-04-14 05:33:51', 'Sandbanks Beach, Poole',                12, 1, 'intermediate', 'open', '2026-04-01 05:33:51'),
+    (8, 'Beginner Badminton Session',      'Relaxed badminton for beginners and people returning to the sport after a break. Rackets available to borrow.',                                                           7, 5, '2026-04-07 05:33:51', 'Islington Leisure Centre, London',      8,  0, 'beginner',     'open', '2026-03-30 05:33:51'),
+    (9, 'Paintball — Woodland Scenario',   'Woodland scenario paintball — attack and defend. Starter paint pack included. Bring old clothes you don\'t mind getting dirty.',                                          2, 3, '2026-04-19 05:33:51', 'Combat Paintball, Surrey',              16, 0, 'beginner',     'open', '2026-03-28 05:33:51')
+ON DUPLICATE KEY UPDATE title = VALUES(title);
+
+-- ── Seed: participants ────────────────────────────────────────────────────
+INSERT INTO participants (id, event_id, user_id, status, joined_at) VALUES
+    (1,  1, 2, 'approved', '2026-04-05 02:27:19'),
+    (2,  2, 5, 'approved', '2026-04-03 05:35:08'),
+    (3,  2, 6, 'approved', '2026-04-04 05:35:08'),
+    (4,  2, 7, 'approved', '2026-04-04 05:35:08'),
+    (5,  3, 3, 'approved', '2026-04-02 05:35:08'),
+    (6,  3, 6, 'approved', '2026-04-03 05:35:08'),
+    (7,  4, 7, 'approved', '2026-04-04 05:35:08'),
+    (8,  4, 4, 'approved', '2026-04-03 05:35:08'),
+    (9,  6, 4, 'approved', '2026-04-04 05:35:08'),
+    (10, 7, 4, 'pending',  '2026-04-03 05:35:08'),
+    (11, 7, 6, 'approved', '2026-04-02 05:35:08'),
+    (12, 8, 3, 'approved', '2026-04-01 05:35:08'),
+    (13, 8, 7, 'approved', '2026-04-03 05:35:08'),
+    (14, 9, 5, 'approved', '2026-03-31 05:35:08'),
+    (15, 9, 4, 'approved', '2026-04-02 05:35:08')
+ON DUPLICATE KEY UPDATE status = VALUES(status);

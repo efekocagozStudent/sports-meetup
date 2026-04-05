@@ -1,10 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/**
- * View model for displaying a single event card (used in event list and dashboard).
- * Pre-computes display values so views contain no business logic.
- */
+
 class EventCardViewModel
 {
     public int    $id;
